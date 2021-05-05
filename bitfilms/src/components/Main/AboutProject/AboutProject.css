@@ -1,0 +1,118 @@
+.about-project__text {
+    display: flex;
+    margin: 70px 0 110px 0;
+    justify-content: space-between;
+}
+
+.about-project__text-column {
+    max-width: 550px;
+}
+
+.about-project__text-item {
+    margin: 0 0 26px 0;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+    color: #000000;
+}
+
+.about-project__text-item-decription {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: #000000;
+}
+
+.about-project__timeline {
+    display: grid;
+    width: 100%;
+    grid-template-columns: minmax(80px,1fr) 4fr;
+    justify-items: center;
+    align-items: center;
+    row-gap: 5px;
+}
+
+.about-project__timeline-weeks {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #000000;
+    padding: 9px 0;
+    background-color: #F2F2F2;
+    width: 100%;
+    text-align: center;
+}
+
+.about-project__timeline-weeks_dark {
+    color: #ffffff;
+    background-color: #000000;
+}
+
+.about-project__timeline-devs {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #A0A0A0;
+    padding: 9px 0 0 0;
+    width: 100%;
+    text-align: center;
+}
+
+@media only screen and (max-width: 768px) {
+    .about-project__text {
+        margin-bottom: 93px;
+    }
+
+    .about-project__text-column {
+        max-width: calc(50% - 15px);
+        margin: 0 15px 0 0;
+    }
+
+    .about-project__text-column:last-of-type {
+        margin: 0;
+    }
+
+    .about-project__text-item {
+        margin-bottom: 22px;
+    }
+    .about-project__text-item-decription {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+}
+
+@media only screen and (max-width: 560px) {
+    .about-project__text {
+        flex-direction: column;
+        margin: 60px 0 0 0;
+    }
+
+    .about-project__text-column {
+        max-width: 100%;
+    }
+
+    .about-project__text-item {
+        margin-bottom: 16px;
+        font-size: 18px;
+    }
+
+    .about-project__text-item-decription {
+        font-size: 11px;
+        line-height: 1.4;
+        margin-bottom: 60px;
+    }
+
+    .about-project__timeline-weeks {
+        font-size: 11px;
+        padding: 11px 0;
+    }
+
+    .about-project__timeline-devs {
+        font-size: 11px;
+        padding-top: 5px;
+    }
+}
