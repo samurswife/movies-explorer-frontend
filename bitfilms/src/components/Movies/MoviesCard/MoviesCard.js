@@ -1,33 +1,45 @@
 import React from 'react';
+import SavedMovies from '../../SavedMovies/SavedMovies';
 import './MoviesCard.css';
 
 const MoviesCard = (props) => {
 
-    const [savedMovie, setSavedMovie] = React.useState(false);
+    const [isMovieSaved, setIsMovieSaved] = React.useState(false);
 
     const handleSaveMovieButtonClick = () => {
-        console.log('Save button clicked!');
-        setSavedMovie(true);
+        props.onSaveMovieButtonClick(props.movie);
+        setIsMovieSaved(true);
     }
 
     const handleDeleteMovieButtonClick = () => {
-        console.log('Delete button clicked!');
+        props.onDeleteButtonClick(props.movie);
     }
 
-    const handlSavedMovieIconClick = () => {
-        console.log('Like icon clicked!');
-        setSavedMovie(false);
+    const handleSavedMovieIconClick = () => {
+        props.onSavedMovieIconClick(props.movie);
+        setIsMovieSaved(false);
     }
+
+    React.useEffect(() => {
+        if (props.savedMovies) {
+            props.savedMovies.forEach((savedMovie) => {
+                if (savedMovie.movieId === props.id) {
+                    setIsMovieSaved(true);
+                }
+            })
+        }
+    },[props.savedMovies]);
 
     return (
         <div className='movies-card'>
+
             <button
-                className={`movies-card__save-button ${savedMovie || props.fromSavedMovies ? 'movies-card__save-button_hidden' : ''}`}
+                className={`movies-card__save-button ${isMovieSaved || props.fromSavedMovies ? 'movies-card__save-button_hidden' : ''}`}
                 onClick={handleSaveMovieButtonClick}
                 type='button'>Сохранить</button>
             <div
-                className={`movies-card__saved-icon ${savedMovie ? 'movies-card__saved-icon_ative' : ''}`}
-                onClick={handlSavedMovieIconClick}
+                className={`movies-card__saved-icon ${isMovieSaved ? 'movies-card__saved-icon_visible' : ''}`}
+                onClick={handleSavedMovieIconClick}
                 alt='Save icon'>
             </div>
             <div
@@ -35,11 +47,13 @@ const MoviesCard = (props) => {
                 onClick={handleDeleteMovieButtonClick}
                 alt='Delete icon'>
             </div>
-            <div className='movies-card__image' alt={props.movie.nameRU} style={{ backgroundImage: `url(${props.movie.image})` }}></div>
-            <div className='movies-card__info'>
-                <p className='movies-card__name'>{props.movie.nameRU}</p>
-                <p className='movies-card__duration'>{Math.floor(props.movie.duration / 60)}ч {Math.floor(props.movie.duration % 60)}м</p>
-            </div>
+            <a href={props.trailerLink} target="_blank" rel="noopener noreferrer" className='movie-card__trailer-link'>
+                <div className='movies-card__image' alt={props.nameRU} style={{ backgroundImage: props.image }}></div>
+                <div className='movies-card__info'>
+                    <p className='movies-card__name'>{props.nameRU}</p>
+                    <p className='movies-card__duration'>{Math.floor(props.duration / 60)}ч {Math.floor(props.duration % 60)}м</p>
+                </div>
+            </a>
         </div>
     )
 }

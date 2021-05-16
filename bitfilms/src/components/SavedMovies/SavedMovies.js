@@ -4,25 +4,76 @@ import Header from '../Header/Header';
 import SearchForm from '../Movies/SearchForm/SearchForm';
 import MoviesCardList from '../Movies/MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
+import MoviesCard from '../Movies/MoviesCard/MoviesCard';
 
 const SavedMovies = (props) => {
 
-    const loggedIn = true;
+    const [movies, setMovies] = React.useState([]);
+    const [filteredMovies, setFilteredMovies] = React.useState([]);
+    const [searchResultMessage, setSearchResultMessage] = React.useState('');
+    const [isSavedMoviesCardListVisible, setIsSavedMoviesCardListVisible] = React.useState(false);
 
-    const handleSearchFormSubmit = (e) => {
-        e.preventDefault();
-        console.log('Search saved movies form submitted!');
+    const moviesList = movies.map((movie) => (
+        <MoviesCard movie={movie}
+            key={movie._id}
+            id={movie.movieId}
+            nameRU={movie.nameRU}
+            image={`url(${movie.image})`}
+            trailerLink={movie.trailer}
+            duration={movie.duration}
+            fromSavedMovies={true}
+            onDeleteButtonClick={props.onDeleteButtonClick} />
+    ));
+
+    const handleSearchFormSubmit = (keyword) => {
+        if (!keyword) {
+            props.onError('Нужно ввести ключевое слово');
+        } else {
+            const newMovies = props.filterMovies(movies, keyword);
+            if (newMovies.length === 0) {
+                setSearchResultMessage('Ничего не найдено');
+                setIsSavedMoviesCardListVisible(false);
+                return;
+            }
+            setSearchResultMessage('');
+            setIsSavedMoviesCardListVisible(true);
+            setMovies(newMovies);
+            setFilteredMovies(newMovies);
+        }
     }
 
-    const handleMoreButtonClick = () => {
-        console.log('More saved movies button clicked!');
-    }
+    React.useEffect(() => {
+        props.getSavedMovies();
+        setIsSavedMoviesCardListVisible(true);
+    }, []);
+
+    React.useEffect(() => {
+        setMovies(props.movies);
+        setFilteredMovies(props.movies);
+    }, [props.movies]);
+
+    React.useEffect(() => {
+        if (props.isCheckBoxChecked) {
+            const shortFilms = movies.filter((movie) => (movie.duration !== null) && (Number.parseInt(movie.duration) <= 40));
+            setMovies(shortFilms);
+        } else {
+            setMovies(filteredMovies);
+        }
+    }, [props.isCheckBoxChecked]);
+
+    const moreMoviesButtonClickClassName = `movies-card-list__more-movies-button`;
 
     return (
         <div className='saved-movies'>
-            <Header loggedIn={loggedIn} handleHamburgerClick={props.handleNavigation} />
-            <SearchForm onSearchFormSubmit={handleSearchFormSubmit}/>
-            <MoviesCardList movies={props.movies} fromSavedMovies={props.fromSavedMovies} onMoreButtonClick={handleMoreButtonClick}/>
+            <Header loggedIn={props.loggedIn} handleHamburgerClick={props.handleNavigation} />
+            <SearchForm onSearchFormSubmit={handleSearchFormSubmit} onCheckboxClick={props.onCkeckboxClick} />
+            <MoviesCardList
+                moviesList={moviesList}
+                moreMoviesButtonClickClassName={moreMoviesButtonClickClassName}
+                fromSavedMovies={true}
+                searchResultMessage={searchResultMessage}
+                isMoviesCardListVisible={isSavedMoviesCardListVisible}
+            />
             <Footer />
         </div>
     )

@@ -42,8 +42,8 @@
     position: absolute;
     top: 14px;
     right: 14px;
-    width: 21px;
-    height: 21px;
+    width: 23px;
+    height: 23px;
     background-image: url('../../../images/save-icon.svg');
     background-repeat: no-repeat;
     background-position: center;
@@ -52,16 +52,20 @@
     display: none;
 } 
 
-.movies-card__saved-icon_ative {
+.movies-card__saved-icon_visible {
     display: block;
+}
+
+.movies-card__saved-icon_visible:hover {
+    cursor: pointer;
 }
 
 .movies-card__delete-button {
     position: absolute;
     top: 14px;
     right: 14px;
-    width: 21px;
-    height: 21px;
+    width: 23px;
+    height: 23px;
     background-image: url('../../../images/delete-button.svg');
     background-repeat: no-repeat;
     background-position: center;
@@ -87,6 +91,10 @@
 
 .movies-card__image:hover {
     cursor: pointer;
+}
+
+.movie-card__trailer-link {
+    text-decoration: none;
 }
 
 .movies-card__info {

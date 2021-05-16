@@ -66,11 +66,20 @@
 }
 
 .form__input-error:last-of-type {
-    margin: 0 0 134px 0;
+    margin: 0 0 165px 0;
 }
 
-.form__input-error_form_login:last-of-type {
-    margin: 0 0 203px 0;
+.form__input-error_type_login:last-of-type {
+    margin: 0 0 222px 0;
+}
+
+.form__submit-error {
+    align-self: center;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #FF4062;
+    margin: 0 0 6px 0;
 }
 
 .form__button {
@@ -83,11 +92,19 @@
     border: none;
     border-radius: 3px;
     cursor: pointer;
-    transition: background-color ease-in-out 0.3s;
+    transition: opacity ease-in-out 0.3s;
 }
 
 .form__button:hover {
+    opacity: .8;
+}
+
+.form__button_disabled {
     background-color: #A0A0A0;
+    cursor: default;
+}
+.form__button_disabled:hover {
+    opacity: 1;
 }
 
 .page-with-form__hint {

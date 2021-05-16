@@ -1,7 +1,7 @@
 import React from 'react';
 import './FilterCheckbox.css';
 
-const FilterCheckbox = () => {
+const FilterCheckbox = (props) => {
 
     const [checked, setChecked] = React.useState(false);
 
@@ -15,11 +15,16 @@ const FilterCheckbox = () => {
         }
     }
 
+    React.useEffect(() => {
+        props.onCheckboxClick(checked);
+    }, [checked]);
+
     return (
         <div className='filter-checkbox'>
             <label htmlFor='filter-checkbox-input' className='filter-checkbox__label'>
                 <input onChange={handleCheckboxInputChange}
-                    checked={checked} id='filter-checkbox-input'
+                    checked={checked}
+                    id='filter-checkbox-input'
                     name='filter-checkbox-input'
                     className='filter-checkbox__input'
                     value='40'
