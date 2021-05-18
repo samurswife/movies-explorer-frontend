@@ -7,13 +7,11 @@ import AboutMe from './AboutMe/AboutMe';
 import Portfolio from './Portfolio/Portfolio';
 import Footer from '../Footer/Footer';
 
-const Main = () => {
-
-    const loggedIn = false;
+const Main = (props) => {
 
     return (
         <main className='main'>
-            <Header loggedIn={loggedIn}/>
+            <Header loggedIn={props.loggedIn} isMainPage={true}/>
             <Promo />
             <AboutProject />
             <Techs />

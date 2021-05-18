@@ -1,4 +1,3 @@
-import { BASE_MAIN_API_URL } from '../../utils/constants';
 import './App.css';
 import React from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
@@ -16,6 +15,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import { moviesApi } from '../../utils/MoviesApi';
 import { MainApi } from '../../utils/MainApi';
 import * as auth from '../../utils/Auth';
+import { BASE_MAIN_API_URL, SHORT_FILM } from '../../utils/constants';
 
 function App() {
   const [isNavigationOpen, setIsNavigationOpen] = React.useState(false);
@@ -28,6 +28,7 @@ function App() {
   const [updateUserResultMessage, setUpdateUserResultMessage] = React.useState('');
   const [currentUser, setCurrentUser] = React.useState({});
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const [allMovies, setAllMovies] = React.useState([]);
   const [movies, setMovies] = React.useState([]);
   const [searchedMovies, setSearchedMovies] = React.useState([]);
   const [savedMovies, setSavedMovies] = React.useState([]);
@@ -35,7 +36,7 @@ function App() {
 
   const history = useHistory();
 
-  let mainApi = new MainApi({
+  const mainApi = new MainApi({
     baseUrl: BASE_MAIN_API_URL,
     headers: {
       'Content-Type': 'application/json',
@@ -113,7 +114,9 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('allMovies');
     localStorage.removeItem('movies');
+    setMovies([]);
     setLoggedIn(false);
     history.push('/');
   }
@@ -123,33 +126,52 @@ function App() {
       openErrorMessage('Нужно ввести ключевое слово');
     } else {
       setMovies([]);
-      localStorage.removeItem('movies');
       setSearchResultMessage('');
-      setIsPreloaderVisible(true);
-      getAllMovies()
-        .then((movies) => {
-          let filteredMovies = filterMovies(movies, keyword);
-          setSearchedMovies(filteredMovies);
-          if (isCheckBoxChecked) {
-            filteredMovies = handleCheckboxFilter(filteredMovies);
-          }
-          return filteredMovies;
-        })
-        .then((filteredMovies) => {
-          if (!filteredMovies || filteredMovies.length === 0) {
+      localStorage.removeItem('movies');
+      if (allMovies.length === 0) {
+        setIsPreloaderVisible(true);
+        getAllMovies()
+          .then((allMovies) => {
+            setAllMovies(allMovies);
+            localStorage.setItem('allMovies', JSON.stringify(allMovies));
+            return allMovies;
+          })
+          .then((allMovies) => {
+            let filteredMovies = handleSearchQuery(allMovies, keyword); //вынести в отдельную f повторяющийся код с фильтрацией
+            setSearchedMovies(filteredMovies);
+            if (isCheckBoxChecked) {
+              filteredMovies = handleCheckboxFilter(filteredMovies);
+            }
+            if (!filteredMovies || filteredMovies.length === 0) {
+              setIsPreloaderVisible(false);
+              setSearchResultMessage('Ничего не найдено');
+              return;
+            }
+            setMovies(filteredMovies);
+            setIsMoviesCardListVisible(true);
             setIsPreloaderVisible(false);
-            setSearchResultMessage('Ничего не найдено');
-            return;
-          }
-          localStorage.setItem('movies', JSON.stringify(filteredMovies));
-          setMovies(filteredMovies);
-          setIsMoviesCardListVisible(true);
+            localStorage.setItem('movies', JSON.stringify(filteredMovies));
+          })
+          .catch((err) => {
+            setIsPreloaderVisible(false);
+            openErrorMessage(err);
+          })
+      } else {
+        let filteredMovies = handleSearchQuery(allMovies, keyword);
+        setSearchedMovies(filteredMovies);
+        if (isCheckBoxChecked) {
+          filteredMovies = handleCheckboxFilter(filteredMovies);
+        }
+        if (!filteredMovies || filteredMovies.length === 0) {
           setIsPreloaderVisible(false);
-        })
-        .catch((err) => {
-          setIsPreloaderVisible(false);
-          setSearchResultMessage(err);
-        });
+          setSearchResultMessage('Ничего не найдено');
+          return;
+        }
+        localStorage.setItem('movies', JSON.stringify(filteredMovies));
+        setMovies(filteredMovies);
+        setIsMoviesCardListVisible(true);
+        setIsPreloaderVisible(false);
+      }
     }
   }
 
@@ -176,10 +198,10 @@ function App() {
   }
 
   const handleCheckboxFilter = (movies) => {
-    return movies.filter((movie) => (movie.duration !== null) && (Number.parseInt(movie.duration) <= 40));
+    return movies.filter((movie) => (movie.duration !== null) && (Number.parseInt(movie.duration) <= SHORT_FILM));
   }
 
-  const filterMovies = (movies, keyword) => {
+  const handleSearchQuery = (movies, keyword) => {
     let filteredMovies = [];
     movies.forEach((movie) => {
       if ((movie.nameRU !== null && movie.nameRU.toString().toLowerCase().includes(keyword.toLowerCase())) ||
@@ -209,6 +231,12 @@ function App() {
       .catch((err) => openErrorMessage(err));
   }
 
+  const handleScreenSize = () => {
+    setTimeout(() => {
+      setScreenSize(document.documentElement.clientWidth);
+    }, 1000);
+  }
+
   React.useEffect(() => {
     if (isCheckBoxChecked && movies) {
       setMovies(handleCheckboxFilter(movies));
@@ -234,10 +262,17 @@ function App() {
   }, []);
 
   React.useEffect(() => {
+    const allMovies = JSON.parse(localStorage.getItem('allMovies'));
+    if (allMovies) {
+      setAllMovies(allMovies);
+    }
+  }, []);
+
+  React.useEffect(() => {
     if (loggedIn) {
       getSavedMovies();
     }
-  }, [loggedIn])
+  }, [loggedIn]);
 
   React.useEffect(() => {
     if (loggedIn) {
@@ -250,11 +285,7 @@ function App() {
   }, []);
 
   React.useEffect(() => {
-    window.addEventListener('resize', () => {
-      setTimeout(() => {
-        setScreenSize(document.documentElement.clientWidth);
-      }, 1000);
-    })
+    window.addEventListener('resize', handleScreenSize)
   }, []);
 
   return (
@@ -262,7 +293,7 @@ function App() {
       <CurrentUserContext.Provider value={currentUser}>
         <Switch>
           <Route exact path='/'>
-            <Main />
+            <Main loggedIn={loggedIn} />
           </Route>
           <Route path='/signup'>
             <Register onRegister={handleRegister} />
@@ -290,7 +321,7 @@ function App() {
             component={SavedMovies}
             loggedIn={loggedIn}
             movies={savedMovies}
-            filterMovies={filterMovies}
+            handleSearchQuery={handleSearchQuery}
             isCheckBoxChecked={isCheckBoxChecked}
             onCkeckboxClick={handleCheckboxClick}
             getSavedMovies={getSavedMovies}

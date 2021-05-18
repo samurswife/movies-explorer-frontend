@@ -5,6 +5,7 @@ import SearchForm from '../Movies/SearchForm/SearchForm';
 import MoviesCardList from '../Movies/MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 import MoviesCard from '../Movies/MoviesCard/MoviesCard';
+import { SHORT_FILM } from '../../utils/constants';
 
 const SavedMovies = (props) => {
 
@@ -29,7 +30,7 @@ const SavedMovies = (props) => {
         if (!keyword) {
             props.onError('Нужно ввести ключевое слово');
         } else {
-            const newMovies = props.filterMovies(movies, keyword);
+            const newMovies = props.handleSearchQuery(movies, keyword);
             if (newMovies.length === 0) {
                 setSearchResultMessage('Ничего не найдено');
                 setIsSavedMoviesCardListVisible(false);
@@ -54,7 +55,7 @@ const SavedMovies = (props) => {
 
     React.useEffect(() => {
         if (props.isCheckBoxChecked) {
-            const shortFilms = movies.filter((movie) => (movie.duration !== null) && (Number.parseInt(movie.duration) <= 40));
+            const shortFilms = movies.filter((movie) => (movie.duration !== null) && (Number.parseInt(movie.duration) <= SHORT_FILM));
             setMovies(shortFilms);
         } else {
             setMovies(filteredMovies);

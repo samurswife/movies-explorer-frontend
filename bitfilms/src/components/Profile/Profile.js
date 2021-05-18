@@ -36,7 +36,7 @@ const Profile = (props) => {
 
     const { name, email } = values;
 
-    const isSubmitButtonDisabled = (props.currentUser.name === name || props.currentUser.email === email ) || (!nameInputIsValid || !emailInputIsValid);
+    const isSubmitButtonDisabled = (props.currentUser.name === name || !nameInputIsValid  ) && (props.currentUser.email === email || !emailInputIsValid);
 
     React.useEffect(() => {
         setValues({

@@ -4,7 +4,19 @@ import Header from '../Header/Header';
 import SearchForm from './SearchForm/SearchForm';
 import MoviesCardList from './MoviesCardList/MoviesCardList';
 import MoviesCard from './MoviesCard/MoviesCard';
-import { BASE_MOVIES_URL } from '../../utils/constants';
+import {
+    BASE_MOVIES_URL,
+    DESKTOP_SCREEN_SIZE,
+    TABLET_SCREEN_SIZE,
+    MOBILE_SCREEN_SIZE_L,
+    MOBILE_SCREEN_SIZE_S,
+    DESCTOP_ITEMS_TO_SHOW,
+    TABLET_ITEMS_TO_SHOW,
+    MOBILE_ITEMS_TO_SHOW,
+    DESCTOP_ITEMS_TO_SHOW_INC,
+    TABLET_ITEMS_TO_SHOW_INC,
+    MOBILE_ITEMS_TO_SHOW_INC
+} from '../../utils/constants';
 
 import Footer from '../Footer/Footer';
 
@@ -35,15 +47,15 @@ const Movies = (props) => {
     }
 
     React.useEffect(() => {
-        if (props.screenSize >= 1280) {
-            setItemsToshow(12);
-            setItemsIncrement(3);
-        } else if (props.screenSize >= 768 && props.screenSize < 1280) {
-            setItemsToshow(8);
-            setItemsIncrement(2);
-        } else if (props.screenSize >= 320 && props.screenSize < 480) {
-            setItemsToshow(5);
-            setItemsIncrement(2);
+        if (props.screenSize >= DESKTOP_SCREEN_SIZE) {
+            setItemsToshow(DESCTOP_ITEMS_TO_SHOW);
+            setItemsIncrement(DESCTOP_ITEMS_TO_SHOW_INC);
+        } else if (props.screenSize >= TABLET_SCREEN_SIZE && props.screenSize < DESKTOP_SCREEN_SIZE) {
+            setItemsToshow(TABLET_ITEMS_TO_SHOW);
+            setItemsIncrement(TABLET_ITEMS_TO_SHOW_INC);
+        } else if (props.screenSize >= MOBILE_SCREEN_SIZE_S && props.screenSize < MOBILE_SCREEN_SIZE_L) {
+            setItemsToshow(MOBILE_ITEMS_TO_SHOW);
+            setItemsIncrement(MOBILE_ITEMS_TO_SHOW_INC);
         }
     }, [props.screenSize]);
 

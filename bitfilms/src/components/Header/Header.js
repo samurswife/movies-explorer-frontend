@@ -7,7 +7,7 @@ import './Header.css';
 const Header = (props) => {
 
     return (
-        <header className={ `header ${ props.loggedIn ? 'header_white' : '' } center` }>
+        <header className={ `header ${ !props.isMainPage ? 'header_white' : '' } center` }>
             <nav className='header-nav'>
                 <Logo />
                 {
