@@ -4,47 +4,75 @@ import Header from '../Header/Header';
 
 const Profile = (props) => {
 
-    const [userName, setUserName] = React.useState('');
-    const [userEmail, setUserEmail] = React.useState('');
+    const [values, setValues] = React.useState({
+        name: '',
+        email: ''
+    });
 
-    const handleUserNameInputChange = (e) => {
-        setUserName(e.target.value);
-    }
+    const [namelInputErrorMessage, setNameInputErrorMessage] = React.useState('');
+    const [emailInputErrorMessage, setEmailInputErrorMessage] = React.useState('');
+    const [nameInputIsValid, setNameInputIsValid] = React.useState(true);
+    const [emailInputIsValid, setEmailInputIsValid] = React.useState(true);
 
-    const handleUserEmailInputChange = (e) => {
-        setUserEmail(e.target.value);
-    }
+
+    const handleChange = React.useCallback((e) => {
+        const { name, value, validationMessage } = e.target;
+        const { valid } = e.target.validity;
+
+        setValues((v) => ({
+            ...v,
+            [name]: value
+        }));
+
+        if (name === 'name') {
+            setNameInputErrorMessage(validationMessage);
+            setNameInputIsValid(valid);
+        } else {
+            setEmailInputErrorMessage(validationMessage);
+            setEmailInputIsValid(valid);
+        }
+    }, [setValues])
+
+
+    const { name, email } = values;
+
+    const isSubmitButtonDisabled = (props.currentUser.name === name || !nameInputIsValid  ) && (props.currentUser.email === email || !emailInputIsValid);
 
     React.useEffect(() => {
-        setUserName(props.user.name);
-        setUserEmail(props.user.email);
-    }, [props.user]);
+        setValues({
+            name: props.currentUser.name,
+            email: props.currentUser.email
+        });
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Edited!');
+        props.onUpdateUser({
+            name,
+            email
+        })
     }
-
-    const loggedIn = true;
 
     return (
         <div className='profile'>
-            <Header loggedIn={loggedIn} handleHamburgerClick={props.handleNavigation} />
+            <Header loggedIn={props.loggedIn} handleHamburgerClick={props.handleNavigation} />
             <div className='profile__container center'>
-                <h3 className='profile__greeting'>{`Привет, ${userName}!`}</h3>
+                <h3 className='profile__greeting'>{`Привет, ${props.currentUser.name}!`}</h3>
                 <form className='profile__form' onSubmit={handleSubmit}>
                     <div className='profile__form-input-area'>
                         <label className='profile__form-label' htmlFor='username'>Имя</label>
-                        <input value={userName} onChange={handleUserNameInputChange} id='username' className='profile__form-input' type="text" minLength='2' maxLength='40' required />
+                        <input value={name} onChange={handleChange} name='name' id='username' className='profile__form-input' type="text" minLength='2' maxLength='40' pattern='^[A-Za-zА-Яа-яЁё\s\-]+$' required />
                     </div>
+                    <span id='profile-form-input-error' className={`profile__form-input-error ${!nameInputIsValid ? 'profile__form-input-error_visible' : ''}`}>{namelInputErrorMessage}</span>
                     <div className='profile__form-input-area'>
                         <label className='profile__form-label' htmlFor='user-email'>E-mail</label>
-                        <input value={userEmail} onChange={handleUserEmailInputChange} id='user-email' className='profile__form-input' type="email" required />
+                        <input value={email} onChange={handleChange} name='email' id='user-email' className='profile__form-input' type="email" required />
                     </div>
-                    <span id='profile-form-input-error' className='profile__form-input-error'>Что-то пошло не так...</span>
-                    <button type='submit' className='profile__button profile__button_type_edit'>Редактировать</button>
+                    <span id='profile-form-input-error' className={`profile__form-input-error ${!emailInputIsValid ? 'profile__form-input-error_visible' : ''}`}>{emailInputErrorMessage}</span>
+                    <p className='form__submit-error'>{props.updateUserResultMessage}</p>
+                    <button type='submit' className={`profile__button profile__button_type_edit ${isSubmitButtonDisabled ? 'profile__button_disabled' : ''}`} disabled={isSubmitButtonDisabled}>Редактировать</button>
                 </form>
-                <button className='profile__button profile__button_type_logout'>Выйти из аккаунта</button>
+                <button className='profile__button profile__button_type_logout' onClick={props.onLogout}>Выйти из аккаунта</button>
             </div>
         </div>
     )

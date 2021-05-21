@@ -12,7 +12,7 @@ const PageWithForm = (props) => {
             </div>
             <form className={`form form_type_${props.formType}`} name={props.formType} method='POST' onSubmit={props.handleSubmit}>
                 {props.children}
-                <button type="submit" className="form__button">{props.formType === 'register' ? 'Зарегистрироваться' : 'Войти'}</button>
+                <button type='submit' className={`form__button ${props.isSubmitButtonDisabled ? 'form__button_disabled' : ''}`} disabled={props.isSubmitButtonDisabled}>{props.formType === 'register' ? 'Зарегистрироваться' : 'Войти'}</button>
             </form>
             { props.formType === 'register' ?
                 <p className='page-with-form__hint'>Уже зарегистрированы?<Link to='/signin' className='page-with-form__hint-link'>Войти</Link></p> :

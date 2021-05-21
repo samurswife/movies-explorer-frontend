@@ -1,19 +1,25 @@
 import React from 'react';
 import './MoviesCardList.css';
-import MoviesCard from '../MoviesCard/MoviesCard';
+import Preloader from '../Preloader/Preloader';
 
 const MoviesCardList = (props) => {
 
+    const handleMoreButtonClick = (e) => {
+        props.onMoreMoviesButtonClick();
+    }
+
     return (
         <div className='movies-card-list center'>
-            <div className='movies-card-list__container'>
-            {
-                props.movies.map((movie, i) => (
-                    <MoviesCard movie={movie} key={i} fromSavedMovies={props.fromSavedMovies}/>
-                ))
-            } 
+            <Preloader isVisible={props.isPreloaderVisible} />
+            {props.searchResultMessage ? <p className='movies-card-list__search-result-message'>{props.searchResultMessage}</p> : <p></p>}
+            <div className={`movies-card-list__container ${props.isMoviesCardListVisible ? 'movies-card-list__container_visible' : ''}`}>
+                {
+                    props.moviesList
+                }
             </div>
-            <button className={`movies-card-list__more-movies-button ${props.fromSavedMovies ? 'movies-card-list__more-movies-button_hidden' : ''}`} onClick={props.onMoreButtonClick}>Ещё</button>
+            <button className={props.moreMoviesButtonClickClassName} onClick={handleMoreButtonClick}>
+                Ещё
+            </button>
         </div>
     )
 }

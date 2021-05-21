@@ -8,7 +8,7 @@ const ErrorMessage = (props) => {
                 <button className='error-message__close-button' type='button' onClick={props.onClose}></button>
                 <div className='error-message__text'>
                     <h3 className='error-message__heading'>Ошибка!</h3>
-                    <p className='error-message__message'>{`Ошибаться - это нормально :)`}</p>
+                    <p className='error-message__message'>{props.message}</p>
                 </div>
             </div>
         </div>
