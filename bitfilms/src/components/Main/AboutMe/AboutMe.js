@@ -7,12 +7,11 @@ const AboutMe = () => {
         <Section sectionClassName='about-me' sectionTitle='Студент'>
             <div className='about-me'>
                 <div className='about-me__info'>
-                    <h3 className='about-me__name'>Виталий</h3>
-                    <p className='about-me__description'>Фронтенд-разработчик, 30 лет</p>
-                    <p className='about-me__bio'>Я родился и живу в Саратове, закончил факультет экономики СГУ. У меня есть жена 
-                    и дочь. Я люблю слушать музыку, а ещё увлекаюсь бегом. Недавно начал кодить. С 2015 года работал в компании 
-                    «СКБ Контур». После того, как прошёл курс по веб-разработке, начал заниматься фриланс-заказами и ушёл с 
-                    постоянной работы.</p>
+                    <h3 className='about-me__name'>Марина</h3>
+                    <p className='about-me__description'>Фронтенд-разработчик, 33 года</p>
+                    <p className='about-me__bio'>Я родилась и живу в Красноярске, закончила филологический факультет СФУ. Я люблю читать, 
+                    путешествовать, увлекаюсь бегом. Недавно начала кодить. В июне 2021 года окончила курс по веб-разработке в Яндекс.Практикум и теперь планирую 
+                    найти постоянную работу в этой сфере.</p>
                     <ul className='about-me__social-links'>
                         <li className='about-me__social-link-item'>
                             <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className='about-me__social-link'>Facebook</a>

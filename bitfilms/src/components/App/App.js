@@ -99,12 +99,17 @@ function App() {
       .catch((err) => openErrorMessage(err));
   }
 
+  const clearUpdateUserResultMessage = () => {
+    setUpdateUserResultMessage('');
+  }
+
   const handleUpdateUser = (user) => {
     mainApi.setUserInfo(user)
       .then((userData) => {
         if (userData) {
           setCurrentUser(userData);
           setUpdateUserResultMessage('Данные успешно изменены');
+          setTimeout(clearUpdateUserResultMessage, 2000);
         }
       })
       .catch((err) => {
@@ -137,7 +142,7 @@ function App() {
             return allMovies;
           })
           .then((allMovies) => {
-            let filteredMovies = handleSearchQuery(allMovies, keyword); //вынести в отдельную f повторяющийся код с фильтрацией
+            let filteredMovies = handleSearchQuery(allMovies, keyword);
             setSearchedMovies(filteredMovies);
             if (isCheckBoxChecked) {
               filteredMovies = handleCheckboxFilter(filteredMovies);
@@ -293,7 +298,7 @@ function App() {
       <CurrentUserContext.Provider value={currentUser}>
         <Switch>
           <Route exact path='/'>
-            <Main loggedIn={loggedIn} />
+            <Main loggedIn={loggedIn} handleNavigation={handleHamburgerButtonClick}/>
           </Route>
           <Route path='/signup'>
             <Register onRegister={handleRegister} />

@@ -8,19 +8,19 @@ const Portfolio = () => {
             <ul className='portfolio'>
                 <li className='portfolio__item'>
                     <p className='portfolio__item-text'>Статичный сайт</p>
-                    <a href='https://github.com/samurswife/how-to-learn/' target="_blank" rel="noopener noreferrer">
+                    <a href='https://happy-pickle.surge.sh/' target="_blank" rel="noopener noreferrer">
                         <div className='portfolio__link' alt='Link to portfilio'></div>
                     </a>
                 </li>
                 <li className='portfolio__item'>
                     <p className='portfolio__item-text'>Адаптивный сайт</p>
-                    <a href='https://github.com/samurswife/russian-travel/' target="_blank" rel="noopener noreferrer">
+                    <a href='https://past-frog.surge.sh/' target="_blank" rel="noopener noreferrer">
                         <div className='portfolio__link' alt='Link to portfilio'></div>
                     </a>
                 </li>
                 <li className='portfolio__item'>
                     <p className='portfolio__item-text'>Одностраничное приложение</p>
-                    <a href='https://github.com/samurswife/react-mesto-api-full/' target="_blank" rel="noopener noreferrer">
+                    <a href='https://shakarova.nomoredomains.monster' target="_blank" rel="noopener noreferrer">
                         <div className='portfolio__link' alt='Link to portfilio'></div>
                     </a>
                 </li>

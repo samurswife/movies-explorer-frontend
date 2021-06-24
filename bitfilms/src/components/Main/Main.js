@@ -11,7 +11,7 @@ const Main = (props) => {
 
     return (
         <main className='main'>
-            <Header loggedIn={props.loggedIn} isMainPage={true}/>
+            <Header loggedIn={props.loggedIn} handleHamburgerClick={props.handleNavigation} isMainPage={true}/>
             <Promo />
             <AboutProject />
             <Techs />
